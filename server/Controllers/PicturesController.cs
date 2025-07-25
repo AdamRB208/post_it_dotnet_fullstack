@@ -31,6 +31,20 @@ public class PicturesController : ControllerBase
     }
   }
 
-
+  [Authorize]
+  [HttpDelete("{pictureId}")]
+  public async Task<ActionResult<string>> DeletePicture(int pictureId)
+  {
+    try
+    {
+      Account userInfo = await _auth0Provider.GetUserInfoAsync<Account>(HttpContext);
+      _picturesService.DeletePicture(pictureId, userInfo);
+      return Ok("Picture was Deleted!");
+    }
+    catch (Exception error)
+    {
+      return BadRequest(error.Message);
+    }
+  }
 
 }
