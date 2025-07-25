@@ -51,4 +51,36 @@ public class AlbumsController : ControllerBase
       return BadRequest(error.Message);
     }
   }
+
+  [HttpGet("{albumId}")]
+  public ActionResult<Album> GetAlbumById(int albumId)
+  {
+    try
+    {
+      Album album = _albumsService.GetAlbumById(albumId);
+      return Ok(album);
+    }
+    catch (Exception error)
+    {
+      return BadRequest(error.Message);
+    }
+  }
+
+  [Authorize]
+  [HttpDelete("{albumId}")]
+  public async Task<ActionResult<Album>> ArchiveAlbum(int albumId)
+  {
+    try
+    {
+      Account userInfo = await _auth0Provider.GetUserInfoAsync<Account>(HttpContext);
+      Album album = _albumsService.ArchiveAlbum(albumId, userInfo);
+      return Ok(album);
+    }
+    catch (Exception error)
+    {
+      return BadRequest(error.Message);
+    }
+  }
+
+
 }
