@@ -30,4 +30,25 @@ public class AlbumsController : ControllerBase
     }
   }
 
+  [HttpGet]
+  public ActionResult<List<Album>> GetAlbums([FromQuery] string category)
+  {
+    try
+    {
+      List<Album> albums;
+      if (category == null)
+      {
+        albums = _albumsService.GetAlbums();
+      }
+      else
+      {
+        albums = _albumsService.GetAlbums(category);
+      }
+      return Ok(albums);
+    }
+    catch (Exception error)
+    {
+      return BadRequest(error.Message);
+    }
+  }
 }

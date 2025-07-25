@@ -1,4 +1,6 @@
 
+
+
 namespace post_it_dotnet_fullstack.Services;
 
 public class AlbumsService
@@ -13,5 +15,17 @@ public class AlbumsService
   {
     Album album = _albumsRepository.CreateAlbum(albumData);
     return album;
+  }
+
+  internal List<Album> GetAlbums()
+  {
+    List<Album> albums = _albumsRepository.GetAlbums();
+    return albums;
+  }
+
+  internal List<Album> GetAlbums(string category)
+  {
+    List<Album> albums = _albumsRepository.GetAlbumsByCategory(category);
+    return albums;
   }
 }

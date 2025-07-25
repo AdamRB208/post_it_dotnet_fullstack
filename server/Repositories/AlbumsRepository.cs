@@ -1,4 +1,7 @@
 
+
+using System.Security.AccessControl;
+
 namespace post_it_dotnet_fullstack.Repositories;
 
 public class AlbumsRepository
@@ -29,6 +32,32 @@ public class AlbumsRepository
     return createdAlbum;
   }
 
+  internal List<Album> GetAlbums()
+  {
+    string sql = @"
+    SELECT albums.*, accounts.* FROM albums INNER JOIN accounts ON accounts.id = albums.creator_id;";
 
+    List<Album> albums = _db.Query(sql, (Album album, Profile account) =>
+    {
+      album.Creator = account;
+      return album;
+    }).ToList();
+    return albums;
+  }
 
+  internal List<Album> GetAlbumsByCategory(string category)
+  {
+    string sql = @"
+    SELECT albums.*, accounts.*
+    FROM albums
+    INNER JOIN accounts ON accounts.id = albums.creator_id
+    WHERE albums.category LIKE @category;";
+
+    List<Album> albums = _db.Query(sql, (Album album, Profile account) =>
+    {
+      album.Creator = account;
+      return album;
+    }, new { category = $"%{category}%" }).ToList();
+    return albums;
+  }
 }
