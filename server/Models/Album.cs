@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+namespace post_it_dotnet_fullstack.Models;
 
 public class Album : RepoItem<int>
 {
