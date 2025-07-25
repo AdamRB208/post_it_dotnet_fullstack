@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace post_it_dotnet_fullstack.Models;
 
-public class Picture
+public class Picture : RepoItem<int>
 {
   [Url, MaxLength(2000)] public string ImgUrl { get; set; }
   public string CreatorId { get; set; }

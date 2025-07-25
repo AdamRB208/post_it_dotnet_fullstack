@@ -1,3 +1,4 @@
+
 namespace post_it_dotnet_fullstack.Services;
 
 public class PicturesService
@@ -8,5 +9,9 @@ public class PicturesService
   }
   private readonly PicturesRepository _picturesRepository;
 
-  
+  internal Picture CreatePicture(Picture pictureData)
+  {
+    Picture picture = _picturesRepository.CreatePicture(pictureData);
+    return picture;
+  }
 }
