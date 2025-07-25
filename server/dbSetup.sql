@@ -28,3 +28,28 @@ CREATE TABLE albums (
     creator_id VARCHAR(255) NOT NULL,
     Foreign Key (creator_id) REFERENCES accounts (id) ON DELETE CASCADE
 );
+-- Pictures Section Starts Here!!!
+
+CREATE TABLE pictures (
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    img_url TEXT NOT NULL,
+    creator_id VARCHAR(255) NOT NULL,
+    album_id INT NOT NULL,
+    FOREIGN KEY (creator_id) REFERENCES accounts (id) ON DELETE CASCADE,
+    FOREIGN KEY (album_id) REFERENCES albums (id) ON DELETE CASCADE
+);
+
+-- Watchers Section Starts Here!!!!
+
+CREATE TABLE watchers (
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    account_id VARCHAR(255) NOT NULL,
+    album_id INT NOT NULL,
+    FOREIGN KEY (account_id) REFERENCES accounts (id) ON DELETE CASCADE,
+    FOREIGN KEY (album_id) REFERENCES albums (id) ON DELETE CASCADE,
+    UNIQUE (account_id, album_id)
+);
