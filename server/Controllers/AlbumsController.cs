@@ -4,14 +4,16 @@ namespace post_it_dotnet_fullstack.Controllers;
 [Route("api/[controller]")]
 public class AlbumsController : ControllerBase
 {
-  public AlbumsController(AlbumsService albumsService, Auth0Provider auth0Provider)
+  public AlbumsController(AlbumsService albumsService, Auth0Provider auth0Provider, PicturesService picturesService)
   {
     _albumsService = albumsService;
     _auth0Provider = auth0Provider;
+    _picturesService = picturesService;
   }
 
   private readonly Auth0Provider _auth0Provider;
   private readonly AlbumsService _albumsService;
+  private readonly PicturesService _picturesService;
 
   [Authorize]
   [HttpPost]
@@ -82,5 +84,18 @@ public class AlbumsController : ControllerBase
     }
   }
 
+  [HttpGet("{albumId}/pictures")]
+  public ActionResult<List<Picture>> GetPicturesByAlbumId(int albumId)
+  {
+    try
+    {
+      List<Picture> pictures = _picturesService.GetPicturesByAlbumId(albumId);
+      return Ok(pictures);
+    }
+    catch (Exception error)
+    {
+      return BadRequest(error.Message);
+    }
+  }
 
 }

@@ -30,4 +30,7 @@ public class PicturesController : ControllerBase
       return BadRequest(error.Message);
     }
   }
+
+
+
 }

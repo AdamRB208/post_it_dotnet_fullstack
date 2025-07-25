@@ -1,4 +1,5 @@
 
+
 namespace post_it_dotnet_fullstack.Services;
 
 public class PicturesService
@@ -13,5 +14,11 @@ public class PicturesService
   {
     Picture picture = _picturesRepository.CreatePicture(pictureData);
     return picture;
+  }
+
+  internal List<Picture> GetPicturesByAlbumId(int albumId)
+  {
+    List<Picture> pictures = _picturesRepository.GetPicturesByAlbumId(albumId);
+    return pictures;
   }
 }
