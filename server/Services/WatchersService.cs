@@ -15,4 +15,15 @@ public class WatchersService
     WatcherProfile watcherProfile = _watchersRepository.CreateWatcher(watcherData);
     return watcherProfile;
   }
+
+  internal List<WatcherProfile> GetWatcherByAlbumId(int albumId)
+  {
+    List<WatcherProfile> watcherProfiles = _watchersRepository.GetWatcherByAlbumId(albumId);
+    return watcherProfiles;
+  }
+
+  internal List<WatcherAlbum> GetWatcherAlbums(string id)
+  {
+    throw new NotImplementedException();
+  }
 }

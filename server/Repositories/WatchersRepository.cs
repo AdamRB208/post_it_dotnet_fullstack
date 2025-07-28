@@ -1,4 +1,5 @@
 
+
 namespace post_it_dotnet_fullstack.Repositories;
 
 public class WatchersRepository
@@ -26,5 +27,21 @@ public class WatchersRepository
       return profile;
     }, watcherData).SingleOrDefault();
     return watcherProfile;
+  }
+
+  internal List<WatcherProfile> GetWatcherByAlbumId(int albumId)
+  {
+    string sql = @"
+    SELECT watchers.*, accounts.* FROM watchers
+    INNER JOIN accounts ON accounts.id = watchers.account_id
+    WHERE watchers.album_id = @albumId;";
+
+    List<WatcherProfile> watcherProfiles = _db.Query(sql, (Watcher watcher, WatcherProfile account) =>
+    {
+      account.AlbumId = watcher.AlbumId;
+      account.Id = watcher.AccountId;
+      return account;
+    }, new { albumId }).ToList();
+    return watcherProfiles;
   }
 }

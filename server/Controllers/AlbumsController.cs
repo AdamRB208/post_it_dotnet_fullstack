@@ -1,19 +1,23 @@
+using System.Threading.Tasks;
+
 namespace post_it_dotnet_fullstack.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
 public class AlbumsController : ControllerBase
 {
-  public AlbumsController(AlbumsService albumsService, Auth0Provider auth0Provider, PicturesService picturesService)
+  public AlbumsController(AlbumsService albumsService, Auth0Provider auth0Provider, PicturesService picturesService, WatchersService watchersService)
   {
     _albumsService = albumsService;
     _auth0Provider = auth0Provider;
     _picturesService = picturesService;
+    _watchersService = watchersService;
   }
 
   private readonly Auth0Provider _auth0Provider;
   private readonly AlbumsService _albumsService;
   private readonly PicturesService _picturesService;
+  private readonly WatchersService _watchersService;
 
   [Authorize]
   [HttpPost]
@@ -91,6 +95,20 @@ public class AlbumsController : ControllerBase
     {
       List<Picture> pictures = _picturesService.GetPicturesByAlbumId(albumId);
       return Ok(pictures);
+    }
+    catch (Exception error)
+    {
+      return BadRequest(error.Message);
+    }
+  }
+
+  [HttpGet("{albumId}/watchers")]
+  public ActionResult<List<WatcherProfile>> GetWatcherByAlbumId(int albumId)
+  {
+    try
+    {
+      List<WatcherProfile> watcherProfiles = _watchersService.GetWatcherByAlbumId(albumId);
+      return Ok(watcherProfiles);
     }
     catch (Exception error)
     {
