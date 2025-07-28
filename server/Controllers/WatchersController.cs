@@ -14,7 +14,22 @@ public class WatchersController : ControllerBase
   private readonly Auth0Provider _auth0Provider;
 
 
+  [Authorize]
+  [HttpPost]
+  public async Task<ActionResult<WatcherProfile>> CreateWatcher([FromBody] Watcher watcherData)
+  {
+    try
+    {
+      Account userInfo = await _auth0Provider.GetUserInfoAsync<Account>(HttpContext);
+      watcherData.AccountId = userInfo.Id;
+      WatcherProfile watcherProfile = _watchersService.CreateWatcher(watcherData);
+      return Ok(watcherProfile);
+    }
+    catch (Exception error)
+    {
+      return BadRequest(error.Message);
+    }
+  }
 
 
-  
 }
