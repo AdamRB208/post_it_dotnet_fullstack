@@ -22,8 +22,9 @@ public class WatchersService
     return watcherProfiles;
   }
 
-  internal List<WatcherAlbum> GetWatcherAlbums(string id)
+  internal List<WatcherAlbum> GetWatcherAlbums(string accountId)
   {
-    throw new NotImplementedException();
+    List<WatcherAlbum> watcherAlbums = _watchersRepository.GetWatcherAlbums(accountId);
+    return watcherAlbums;
   }
 }
