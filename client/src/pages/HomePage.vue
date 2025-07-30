@@ -1,5 +1,48 @@
 <script setup>
+import { AppState } from '@/AppState.js';
+import { computed, ref } from 'vue';
 
+const account = computed(() => AppState.account)
+
+const albums = computed(() => {
+  if (filterCategory.value == 'all') {
+    return AppState.albums
+  }
+  return AppState.albums.filter(album => album.category == filterCategory.value)
+})
+
+const filterCategory = ref('all')
+
+const categories = [
+  {
+    name: 'all',
+    backgroundImg: ''
+  },
+  {
+    name: 'aesthetics',
+    backgroundImg: ''
+  },
+  {
+    name: 'games',
+    backgroundImg: ''
+  },
+  {
+    name: 'animals',
+    backgroundImg: ''
+  },
+  {
+    name: 'food',
+    backgroundImg: ''
+  },
+  {
+    name: 'vibes',
+    backgroundImg: ''
+  },
+  {
+    name: 'misc',
+    backgroundImg: ''
+  },
+]
 
 </script>
 
@@ -7,8 +50,8 @@
   <section class="container-fluid app-bg">
     <div class="row">
       <div class="col-12">
-        <div>
-
+        <div class="border-bottom border-postItBlue">
+          <span class="shadow rounded fs-4 text-postItBlue">Find Your Interests </span>
         </div>
       </div>
     </div>
@@ -26,5 +69,6 @@
   background-attachment: fixed;
   min-height: 100dvh;
 }
+
 
 </style>

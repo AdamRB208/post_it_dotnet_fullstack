@@ -6,9 +6,9 @@ export const AppState = reactive({
   identity: null,
   /** @type {import('./models/Account.js').Account} user info from the database*/
   account: null,
-  /** @type {import('./models/Album.js').Album []} user info from the database*/
+  /** @type {import('./models/Album.js').Album []} Album info from the database*/
   albums: [],
-  /** @type {import('./models/Album.js').Album []} user info from the database*/
+  /** @type {import('./models/Album.js').Album []} Album info from the database*/
   activeAlbum: null,
 
 })
