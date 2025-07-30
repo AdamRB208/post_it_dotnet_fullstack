@@ -7,7 +7,9 @@
   <section class="container-fluid app-bg">
     <div class="row">
       <div class="col-12">
+        <div>
 
+        </div>
       </div>
     </div>
   </section>
@@ -21,6 +23,7 @@
   // background-image: url('https://media.istockphoto.com/id/1166376707/photo/abstract-background-of-shining-particles-digital-sparkling-blue-particles-beautiful-blue.jpg?s=612x612&w=0&k=20&c=1OUeSe02VMaPzjudh8ZJDaNBtpr9lhsKAYdTrzyGZX0=');
   background-size: cover;
   background-position: center;
+  background-attachment: fixed;
   min-height: 100dvh;
 }
 
