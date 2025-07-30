@@ -27,4 +27,24 @@ public class WatchersService
     List<WatcherAlbum> watcherAlbums = _watchersRepository.GetWatcherAlbums(accountId);
     return watcherAlbums;
   }
+
+  private Watcher GetWatcherById(int watcherId)
+  {
+    Watcher watcher = _watchersRepository.GetWatcherById(watcherId);
+    if (watcher == null)
+    {
+      throw new Exception("Invalid watcher id: " + watcherId);
+    }
+    return watcher;
+  }
+
+  internal void DeleteWatcher(int watcherId, Account userInfo)
+  {
+    Watcher watcher = GetWatcherById(watcherId);
+    if (watcher.AccountId != userInfo.Id)
+    {
+      throw new Exception($"YOU CANNOT DELETE ANOTHER USER'S WATCHER, {userInfo.Name.ToUpper()}!!!");
+    }
+    _watchersRepository.DeleteWatcher(watcherId);
+  }
 }

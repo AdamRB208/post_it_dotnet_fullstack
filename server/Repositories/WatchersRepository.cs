@@ -1,6 +1,8 @@
 
 
 
+
+
 namespace post_it_dotnet_fullstack.Repositories;
 
 public class WatchersRepository
@@ -34,7 +36,7 @@ public class WatchersRepository
     List<WatcherProfile> watcherProfiles = _db.Query(sql, (Watcher watcher, WatcherProfile account) =>
     {
       account.AlbumId = watcher.AlbumId;
-      account.Id = watcher.AccountId;
+      account.WatcherId = watcher.Id;
       return account;
     }, new { albumId }).ToList();
     return watcherProfiles;
@@ -56,5 +58,25 @@ public class WatchersRepository
       return album;
     }, new { accountId }).ToList();
     return watcherAlbums;
+  }
+
+  internal Watcher GetWatcherById(int watcherId)
+  {
+    string sql = @"
+    SELECT * FROM watchers WHERE id = @watcherId;";
+
+    Watcher watcher = _db.Query<Watcher>(sql, new { watcherId }).SingleOrDefault();
+    return watcher;
+  }
+
+  internal void DeleteWatcher(int watcherId)
+  {
+    string sql = @"
+    DELETE FROM watchers WHERE id = @watcherId LIMIT 1;";
+
+    int rowsAffected = _db.Execute(sql, new { watcherId });
+
+    if (rowsAffected == 1) return;
+    throw new Exception(rowsAffected + "ROWS WERE AFFECTED!");
   }
 }
