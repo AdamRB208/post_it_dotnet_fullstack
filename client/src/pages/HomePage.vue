@@ -1,5 +1,6 @@
 <script setup>
 import { AppState } from '@/AppState.js';
+import AlbumForm from '@/components/AlbumForm.vue';
 import AlbumsCard from '@/components/AlbumsCard.vue';
 import ModalComponent from '@/components/ModalComponent.vue';
 import { albumsService } from '@/services/AlbumsService.js';
@@ -99,7 +100,7 @@ async function getAlbums() {
     </div>
   </section>
   <ModalComponent :modal-title="'Create Album'" :modalId="'albumModal'">
-
+    <AlbumForm />
   </ModalComponent>
 </template>
 
