@@ -21,6 +21,11 @@ const routes = [
     name: 'Account',
     component: loadPage('AccountPage'),
     beforeEnter: authGuard
+  },
+  {
+    path: '/albums/:albumId',
+    name: 'Albums Page',
+    component: loadPage('AlbumsPage'),
   }
 ]
 
