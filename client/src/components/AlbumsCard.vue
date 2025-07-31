@@ -12,7 +12,7 @@ defineProps({
   <RouterLink :to="{ name: 'Albums Page', params: { albumId: album.id } }" :title="`Go to the ${album.title}'s page!`">
     <div class="rounded shadow d-flex align-items-end text-light album-card mb-2 mt-2"
       :style="{ backgroundImage: `url(${album.coverImg})` }">
-      <div class="d-flex justify-content-between align-items-center rounded bg-dark p-2 flex-grow-1">
+      <div class="d-flex justify-content-between align-items-center rounded p-2 flex-grow-1 title-section">
         <div>
           <p>{{ album.title }}</p>
         </div>
@@ -33,6 +33,9 @@ defineProps({
   background-position: center;
 }
 
+.title-section {
+  background-color: rgb(33 37 41 / 80%)
+}
 img {
   height: 2rem;
 }
