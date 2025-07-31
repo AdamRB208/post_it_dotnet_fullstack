@@ -1,6 +1,9 @@
 <script setup>
 import { AppState } from '@/AppState.js';
-import { computed, ref } from 'vue';
+import { albumsService } from '@/services/AlbumsService.js';
+import { logger } from '@/utils/Logger.js';
+import { Pop } from '@/utils/Pop.js';
+import { computed, onMounted, ref } from 'vue';
 
 const account = computed(() => AppState.account)
 
@@ -44,6 +47,20 @@ const categories = [
   },
 ]
 
+onMounted(() => {
+  getAlbums()
+})
+
+async function getAlbums() {
+  try {
+    await albumsService.getAlbums()
+  }
+  catch (error) {
+    Pop.error(error, 'Could Not Get Albums!')
+    logger.error('COULD NOT GET ALBUMS!', error)
+  }
+}
+
 </script>
 
 <template>
@@ -59,7 +76,7 @@ const categories = [
       <div v-for="category in categories" :key="'filter ' + category.name" class="col-md-3">
         <div class="m-2 rounded text-center text-shadow fw-bold fs-3 p-4 category-btn" role="button"
           :style="{ backgroundImage: `url(${category.backgroundImg})` }" :title="`Filter by ${category.name}`">{{
-            category.name }}</div>
+          category.name }}</div>
       </div>
       <div v-if="account" class="col-md-3">
         <div class="m-2 rounded text-center text-shadow fw-bold fs-3 p-4 category-btn create-btn" role="button"
@@ -72,6 +89,9 @@ const categories = [
           <div class="border-bottom border-postItBlue">
             <span class="shadow rounded fs-4 text-postItBlue ps-1">Popular Albums</span>
           </div>
+        </div>
+        <div class="col-md-4">
+          {{ albums }}
         </div>
       </div>
     </div>
