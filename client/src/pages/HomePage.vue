@@ -70,7 +70,7 @@ async function getAlbums() {
   <section class="container-fluid app-bg">
     <div class="row">
       <div class="col-12">
-        <div class="border-bottom border-postItBlue">
+        <div class="border-bottom border-postItBlue mt-3">
           <span class="shadow rounded fs-4 text-postItBlue ps-1">Find Your Interests </span>
         </div>
       </div>
@@ -89,7 +89,7 @@ async function getAlbums() {
       </div>
       <div class="row">
         <div class="col-12">
-          <div class="border-bottom border-postItBlue">
+          <div class="border-bottom border-postItBlue mt-5">
             <span class="shadow rounded fs-4 text-postItBlue ps-1">Popular Albums</span>
           </div>
         </div>

@@ -4,6 +4,14 @@ import { AppState } from "@/AppState.js"
 import { Album } from "@/models/Album.js"
 
 class AlbumsService {
+  async getAlbumById(albumId) {
+    AppState.activeAlbum = null
+    const response = await api.get(`api/albums/${albumId}`)
+    logger.log('Got Album by Id!!', response.data)
+    const album = new Album(response.data)
+    AppState.activeAlbum = album
+  }
+
   async createAlbum(albumData) {
     const response = await api.post('api/albums', albumData)
     logger.log('Created Album!', response.data)
