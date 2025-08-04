@@ -81,8 +81,8 @@ async function deleteAlbum() {
                   class="btn btn-postItPurple rounded-pill">{{ album.archived ? 'Unarchive Album' : 'Archive Album'
                   }}<span class="mdi"
                     :class="album.archived ? 'mdi-lock-open-outline' : 'mdi-lock-outline'"></span></button>
-                <button @click="deleteAlbum()" class="btn btn-danger rounded-pill" type="button">Delete Album <i
-                    class="mdi mdi-delete"></i></button>
+                <button @click="deleteAlbum()" v-if="album.creatorId == account?.id" class="btn btn-danger rounded-pill"
+                  type="button">Delete Album <i class="mdi mdi-delete"></i></button>
               </div>
               <div class="d-flex gap-2 align-items-end">
                 <span>created by {{ album.creator.name }}</span>
