@@ -1,6 +1,8 @@
 <script setup>
 import { AppState } from '@/AppState.js';
+import PictureCard from '@/components/PictureCard.vue';
 import { albumsService } from '@/services/AlbumsService.js';
+import { picturesService } from '@/services/PicturesService.js';
 import { logger } from '@/utils/Logger.js';
 import { Pop } from '@/utils/Pop.js';
 import { computed, onMounted } from 'vue';
@@ -9,12 +11,14 @@ import { useRoute, useRouter } from 'vue-router';
 
 const album = computed(() => AppState.activeAlbum)
 const account = computed(() => AppState.account)
+const picture = computed(() => AppState.pictures)
 
 const route = useRoute()
 const router = useRouter()
 
 onMounted(() => {
   getAlbumById()
+  getPicturesByAlbumId()
 })
 
 async function getAlbumById() {
@@ -60,6 +64,17 @@ async function deleteAlbum() {
   }
 }
 
+async function getPicturesByAlbumId() {
+  try {
+    const albumId = route.params.albumId
+    await picturesService.getPicturesByAlbumId(albumId)
+  }
+  catch (error) {
+    Pop.error(error, 'Could not get Picture by Album Id!');
+    logger.error('COULD NOT GET PICTURE BY ALBUM ID!', error);
+  }
+}
+
 </script>
 
 
@@ -101,7 +116,9 @@ async function deleteAlbum() {
       </div>
       <div class="col-md-9">
         <div class="text-light">
-          Pictures here
+          <div v-for="picture in picture" :key="picture.id" class="mb-3">
+            <PictureCard :picture="picture" />
+          </div>
         </div>
       </div>
     </div>
