@@ -51,4 +51,15 @@ public class AlbumsService
     _albumsRepository.ArchiveAlbum(album);
     return album;
   }
+
+  internal string DeleteAlbum(int albumId, Account userInfo)
+  {
+    Album album = GetAlbumById(albumId);
+    if (album.CreatorId != userInfo.Id)
+    {
+      throw new Exception($"YOU ARE NOT ALLOWED TO DELETE SOMEONE ELSES ALBUM, {userInfo.Name.ToUpper()}!");
+    }
+    _albumsRepository.DeleteAlbum(albumId);
+    return $"Your {album.Title} Album has been deleted!";
+  }
 }

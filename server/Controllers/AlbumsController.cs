@@ -73,7 +73,7 @@ public class AlbumsController : ControllerBase
   }
 
   [Authorize]
-  [HttpDelete("{albumId}")]
+  [HttpPut("{albumId}")]
   public async Task<ActionResult<Album>> ArchiveAlbum(int albumId)
   {
     try
@@ -109,6 +109,22 @@ public class AlbumsController : ControllerBase
     {
       List<WatcherProfile> watcherProfiles = _watchersService.GetWatcherByAlbumId(albumId);
       return Ok(watcherProfiles);
+    }
+    catch (Exception error)
+    {
+      return BadRequest(error.Message);
+    }
+  }
+
+  [Authorize]
+  [HttpDelete("{albumId}")]
+  public async Task<ActionResult<string>> DeleteAlbum(int albumId)
+  {
+    try
+    {
+      Account userInfo = await _auth0Provider.GetUserInfoAsync<Account>(HttpContext);
+      string message = _albumsService.DeleteAlbum(albumId, userInfo);
+      return Ok(message);
     }
     catch (Exception error)
     {

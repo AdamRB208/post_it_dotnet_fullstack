@@ -92,4 +92,20 @@ public class AlbumsRepository
         throw new Exception("Update was too Successful!");
     }
   }
+
+  internal void DeleteAlbum(int albumId)
+  {
+    string sql = @"
+    DELETE FROM albums WHERE id = @albumId LIMIT 1;";
+
+    int rowsAffected = _db.Execute(sql, new { albumId });
+    if (rowsAffected == 0)
+    {
+      throw new Exception("NO ROWS WERE DELETED!");
+    }
+    if (rowsAffected > 1)
+    {
+      throw new Exception(rowsAffected + "ROWS WERE DELETED!");
+    }
+  }
 }
