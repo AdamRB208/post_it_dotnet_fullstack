@@ -6,7 +6,7 @@ export class Profile {
   }
 }
 
-export class Account {
+export class Account extends Profile {
   /**
    * @typedef AccountData
    * @property {string} id
@@ -17,6 +17,7 @@ export class Account {
    * @param {AccountData} data
    */
   constructor(data) {
+    super(data)
     this.email = data.email
   }
 }

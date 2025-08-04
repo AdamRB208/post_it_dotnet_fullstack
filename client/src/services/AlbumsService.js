@@ -5,8 +5,14 @@ import { Album } from "@/models/Album.js"
 
 class AlbumsService {
 
-  async archiveAlbum(albumId) {
+  async deleteAlbum(albumId) {
     const response = await api.delete(`api/albums/${albumId}`)
+    logger.log('Deleted Album!', response.data)
+    AppState.activeAlbum = null
+  }
+
+  async archiveAlbum(albumId) {
+    const response = await api.put(`api/albums/${albumId}`)
     logger.log('Archived Album', response.data)
     const album = new Album(response.data)
     AppState.activeAlbum = album

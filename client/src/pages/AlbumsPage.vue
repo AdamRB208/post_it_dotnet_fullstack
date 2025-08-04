@@ -4,13 +4,14 @@ import { albumsService } from '@/services/AlbumsService.js';
 import { logger } from '@/utils/Logger.js';
 import { Pop } from '@/utils/Pop.js';
 import { computed, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 
 const album = computed(() => AppState.activeAlbum)
 const account = computed(() => AppState.account)
 
 const route = useRoute()
+const router = useRouter()
 
 onMounted(() => {
   getAlbumById()
@@ -23,7 +24,7 @@ async function getAlbumById() {
   }
   catch (error) {
     Pop.error(error, 'Could not get Album by Id!')
-    logger.log('COULD NOT GET ALBUM BY ID!', error)
+    logger.error('COULD NOT GET ALBUM BY ID!', error)
   }
 }
 
@@ -38,7 +39,24 @@ async function archiveAlbum() {
   }
   catch (error) {
     Pop.error(error, 'Unable to archive Album');
-    logger.log('UNABLE TO ARCHIVE ALBUM!', error)
+    logger.error('UNABLE TO ARCHIVE ALBUM!', error)
+  }
+}
+
+async function deleteAlbum() {
+  try {
+    const confirmed = await Pop.confirm(`Are you sure you want to delete ${album.value.title}?`, 'It will be forever.')
+    if (!confirmed) {
+      return
+    }
+    const albumId = route.params.albumId
+    await albumsService.deleteAlbum(albumId)
+    Pop.toast('That album has been deleted!')
+    router.push({ name: 'Home' })
+  }
+  catch (error) {
+    Pop.error(error, 'Unable to archive Album');
+    logger.error('UNABLE TO DELETE ALBUM', error)
   }
 }
 
@@ -59,13 +77,12 @@ async function archiveAlbum() {
             <div class="d-flex justify-content-between align-items-end">
               <div class="d-flex gap-2">
                 <div class="text-center rounded-pill bg-postItBlue p-2">{{ album.category }}</div>
-                <button class="btn btn-danger rounded-pill" type="button">Delete Album <i
+                <button @click="archiveAlbum()" v-if="album.creatorId == account?.id"
+                  class="btn btn-postItPurple rounded-pill">{{ album.archived ? 'Unarchive Album' : 'Archive Album'
+                  }}<span class="mdi"
+                    :class="album.archived ? 'mdi-lock-open-outline' : 'mdi-lock-outline'"></span></button>
+                <button @click="deleteAlbum()" class="btn btn-danger rounded-pill" type="button">Delete Album <i
                     class="mdi mdi-delete"></i></button>
-                <button @click="archiveAlbum()" v-if="album.creatorId === account?.id"
-                  class="btn btn-postItPurple rounded-pill">{{ album.archived ? 'Unarchive Album' : 'Archive Album' }}<i
-                    class="mdi mdi-lock-outline"></i></button>
-                <!-- <button class="btn btn-postItPurple rounded-pill">Un-Archive Album <i
-                    class="mdi mdi-lock-open-outline"></i></button> -->
               </div>
               <div class="d-flex gap-2 align-items-end">
                 <span>created by {{ album.creator.name }}</span>
