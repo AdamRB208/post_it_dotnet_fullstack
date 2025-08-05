@@ -121,6 +121,9 @@ async function getPicturesByAlbumId() {
           </div>
         </div>
       </div>
+      <div class="d-flex justify-content-end">
+        <button class="btn btn-vue rounded-pill text-light mb-3" type="button">Add Picture</button>
+      </div>
     </div>
   </section>
 </template>
