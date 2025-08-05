@@ -117,7 +117,7 @@ async function getPicturesByAlbumId() {
         </div>
       </div>
       <div class="col-md-9">
-        <div class="text-light">
+        <div class="text-light masonry-container">
           <div v-for="picture in picture" :key="picture.id" class="mb-3">
             <PictureCard :picture="picture" />
           </div>
@@ -155,5 +155,13 @@ async function getPicturesByAlbumId() {
 }
 .creator-img {
   height: 4rem;
+}
+.masonry-container {
+  columns: 200px;
+}
+
+.masonry-container>* {
+  display: inline-block;
+  break-inside: avoid;
 }
 </style>
