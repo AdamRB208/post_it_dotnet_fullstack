@@ -93,7 +93,7 @@ async function getPicturesByAlbumId() {
               <div class="d-flex gap-2">
                 <div class="text-center rounded-pill bg-postItBlue p-2">{{ album.category }}</div>
                 <button @click="archiveAlbum()" v-if="album.creatorId == account?.id"
-                  class="btn btn-postItPurple rounded-pill">{{ album.archived ? 'Unarchive Album' : 'Archive Album'
+                  class="btn btn-postItPurple rounded-pill">{{ album.archived ? 'Unarchive Album ' : 'Archive Album '
                   }}<span class="mdi"
                     :class="album.archived ? 'mdi-lock-open-outline' : 'mdi-lock-outline'"></span></button>
                 <button @click="deleteAlbum()" v-if="album.creatorId == account?.id" class="btn btn-danger rounded-pill"

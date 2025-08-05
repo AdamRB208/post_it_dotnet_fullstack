@@ -20,9 +20,6 @@ const props = defineProps({
       <div>{{ picture.creator.name }}</div>
     </div>
   </div>
-  <div class="d-flex justify-content-end">
-    <button class="btn btn-vue rounded-pill mt-3 text-light " type="button">Add Picture</button>
-  </div>
 </template>
 
 
