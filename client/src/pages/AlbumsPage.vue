@@ -125,7 +125,7 @@ async function getPicturesByAlbumId() {
       </div>
       <div v-if="account" class="d-flex justify-content-end">
         <button class="btn btn-vue rounded-pill text-light mb-3" type="button" data-bs-toggle="modal"
-          data-bs-target="#pictureModal">Add Picture</button>
+          data-bs-target="#pictureModal"><i class="mdi mdi-plus"></i>Add Picture</button>
         <ModalComponent :modal-title="'Create Picture'" :modal-id="'pictureModal'">
           <PictureForm />
         </ModalComponent>
