@@ -1,6 +1,8 @@
 <script setup>
 import { AppState } from '@/AppState.js';
+import ModalComponent from '@/components/ModalComponent.vue';
 import PictureCard from '@/components/PictureCard.vue';
+import PictureForm from '@/components/PictureForm.vue';
 import { albumsService } from '@/services/AlbumsService.js';
 import { picturesService } from '@/services/PicturesService.js';
 import { logger } from '@/utils/Logger.js';
@@ -121,8 +123,12 @@ async function getPicturesByAlbumId() {
           </div>
         </div>
       </div>
-      <div class="d-flex justify-content-end">
-        <button class="btn btn-vue rounded-pill text-light mb-3" type="button">Add Picture</button>
+      <div v-if="account" class="d-flex justify-content-end">
+        <button class="btn btn-vue rounded-pill text-light mb-3" type="button" data-bs-toggle="modal"
+          data-bs-target="#pictureModal">Add Picture</button>
+        <ModalComponent :modal-title="'Create Picture'" :modal-id="'pictureModal'">
+          <PictureForm />
+        </ModalComponent>
       </div>
     </div>
   </section>
