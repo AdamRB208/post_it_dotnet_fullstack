@@ -4,6 +4,13 @@ import { logger } from "@/utils/Logger.js"
 import { Picture } from "@/models/Picture.js"
 
 class PicturesService {
+  async deletePicture(pictureId) {
+    const response = await api.delete(`api/pictures/${pictureId}`)
+    logger.log('Deleted Picture!', response.data)
+    const pictures = AppState.pictures
+    const index = pictures.findIndex(picture => picture.id == pictureId)
+    pictures.splice(index, 1)
+  }
   async createPicture(pictureData) {
     const response = await api.post('api/pictures', pictureData)
     logger.log('Created Picture!', response.data)
