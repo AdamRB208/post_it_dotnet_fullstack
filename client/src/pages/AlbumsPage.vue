@@ -112,8 +112,11 @@ async function getPicturesByAlbumId() {
     </div>
     <div class="row mt-3">
       <div class="col-md-3">
-        <div class="text-light">
-          Watchers here
+        <div class="d-flex mb-3 text-light">
+          <div class="rounded p-2 flex-grow-1">
+            <span class="d-block">{{ album.watcherCount }}</span>
+            <span>Watchers</span>
+          </div>
         </div>
       </div>
       <div class="col-md-9">
