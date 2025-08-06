@@ -12,5 +12,9 @@ export const AppState = reactive({
   activeAlbum: null,
   /** @type {import('./models/Picture.js').Picture []} Picture info from the database*/
   pictures: [],
+  /** @type {import('./models/Watcher.js').WatcherProfile []} Watcher Profile info from the database*/
+  WatcherProfiles: [],
+  /** @type {import('./models/Watcher.js').WatcherAlbum []} Watcher Album info from the database*/
+  watcherAlbums: [],
 })
 
