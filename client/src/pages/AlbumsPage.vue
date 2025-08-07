@@ -3,6 +3,7 @@ import { AppState } from '@/AppState.js';
 import ModalComponent from '@/components/ModalComponent.vue';
 import PictureCard from '@/components/PictureCard.vue';
 import PictureForm from '@/components/PictureForm.vue';
+import { WatcherAlbum } from '@/models/Watcher.js';
 import { albumsService } from '@/services/AlbumsService.js';
 import { picturesService } from '@/services/PicturesService.js';
 import { logger } from '@/utils/Logger.js';
@@ -14,6 +15,9 @@ import { useRoute, useRouter } from 'vue-router';
 const album = computed(() => AppState.activeAlbum)
 const account = computed(() => AppState.account)
 const picture = computed(() => AppState.pictures)
+const watcherAlbum = computed(() => AppState.watcherAlbums)
+
+const isWatching = computed(() => watcherAlbum.value.some(watcher => watcher.accountId == account.value?.id))
 
 const route = useRoute()
 const router = useRouter()
@@ -77,6 +81,7 @@ async function getPicturesByAlbumId() {
   }
 }
 
+
 </script>
 
 
@@ -121,6 +126,9 @@ async function getPicturesByAlbumId() {
             <span class="mdi mdi-account-plus d-block"></span>
             <span>Join</span>
           </button>
+        </div>
+        <div v-if="isWatching">
+          <p>You are watching this album!</p>
         </div>
       </div>
       <div class="col-md-9">
