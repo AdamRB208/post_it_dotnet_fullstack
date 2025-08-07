@@ -28,6 +28,29 @@ CREATE TABLE albums (
     creator_id VARCHAR(255) NOT NULL,
     Foreign Key (creator_id) REFERENCES accounts (id) ON DELETE CASCADE
 );
+ALTER TABLE albums ADD COLUMN watcher_count INT NOT NULL DEFAULT 0;
+
+SELECT watchers.*, albums.*, accounts.*, (
+        SELECT COUNT(*)
+        FROM watchers
+        WHERE
+            watchers.album_id = albums.id
+    ) as watcher_count
+FROM
+    watchers
+    INNER JOIN albums ON albums.id = watchers.album_id
+    INNER JOIN accounts ON accounts.id = albums.creator_id
+WHERE
+    watchers.account_id = @accountId;
+
+SELECT albums.*, accounts.*, (
+        SELECT COUNT(*)
+        FROM watchers
+        WHERE
+            album_id = albums.id
+    ) as watcher_count
+FROM albums
+    INNER JOIN accounts ON accounts.id = albums.creator_id;
 -- Pictures Section Starts Here!!!
 
 CREATE TABLE pictures (
@@ -53,3 +76,34 @@ CREATE TABLE watchers (
     FOREIGN KEY (album_id) REFERENCES albums (id) ON DELETE CASCADE,
     UNIQUE (account_id, album_id)
 );
+
+SELECT albums.*, accounts.*, COUNT(watchers.id) as watcher_count
+FROM
+    albums
+    INNER JOIN accounts ON accounts.id = albums.creator_id
+    LEFT JOIN watchers ON watchers.album_id = albums.id
+WHERE
+    albums.id = 15
+GROUP BY
+    albums.id,
+    accounts.id;
+
+SELECT albums.*, accounts.*, (
+        SELECT COUNT(*)
+        FROM watchers
+        WHERE
+            watchers.album_id = albums.id
+    ) as watcher_count
+FROM albums
+    INNER JOIN accounts ON accounts.id = albums.creator_id;
+
+SELECT albums.*, accounts.*, (
+        SELECT COUNT(*)
+        FROM watchers
+        WHERE
+            watchers.album_id = albums.id
+    ) as watcher_count
+FROM albums
+    INNER JOIN accounts ON accounts.id = albums.creator_id
+WHERE
+    albums.id = 15;

@@ -45,7 +45,9 @@ public class WatchersRepository
   internal List<WatcherAlbum> GetWatcherAlbums(string accountId)
   {
     string sql = @"
-    SELECT watchers.*, albums.*, accounts.* FROM watchers
+    SELECT watchers.*, albums.*, accounts.*,
+      (SELECT COUNT(*) FROM watchers WHERE watchers.album_id = albums.id) as watcher_count
+    FROM watchers
     INNER JOIN albums ON albums.id = watchers.album_id
     INNER JOIN accounts ON accounts.id = albums.creator_id
     WHERE watchers.account_id = @accountId;";

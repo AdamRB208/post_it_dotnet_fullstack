@@ -113,10 +113,14 @@ async function getPicturesByAlbumId() {
     <div class="row mt-3">
       <div class="col-md-3">
         <div class="d-flex mb-3 text-light">
-          <div class="rounded p-2 flex-grow-1">
+          <div class="rounded p-2 flex-grow-1 watchers-sec">
             <span class="d-block">{{ album.watcherCount }}</span>
-            <span>Watchers</span>
+            <span> Watchers</span>
           </div>
+          <button v-if="account" class="btn btn-vue">
+            <span class="mdi mdi-account-plus d-block"></span>
+            <span>Join</span>
+          </button>
         </div>
       </div>
       <div class="col-md-9">
@@ -155,6 +159,9 @@ async function getPicturesByAlbumId() {
 .details-sec {
   background-color: rgb(33 37 41 / 80%);
   color: white;
+}
+.watchers-sec {
+  background-color: rgb(33 37 41 / 80%);
 }
 .creator-img {
   height: 4rem;

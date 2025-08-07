@@ -35,7 +35,9 @@ public class AlbumsRepository
   internal List<Album> GetAlbums()
   {
     string sql = @"
-    SELECT albums.*, accounts.* FROM albums INNER JOIN accounts ON accounts.id = albums.creator_id;";
+    SELECT albums.*, accounts.*,
+      (SELECT COUNT(*) FROM watchers WHERE watchers.album_id = albums.id) as watcher_count
+    FROM albums INNER JOIN accounts ON accounts.id = albums.creator_id;";
 
     List<Album> albums = _db.Query(sql, (Album album, Profile account) =>
     {
@@ -61,19 +63,45 @@ public class AlbumsRepository
     return albums;
   }
 
+  // internal Album GetAlbumById(int albumId)
+  // {
+  //   string sql = @"
+  //   SELECT albums.*, accounts.*,
+  //     (SELECT COUNT(*) FROM watchers WHERE watchers.album_id = albums.id) as WatcherCount
+  //   FROM albums
+  //   INNER JOIN accounts ON accounts.id = albums.creator_id
+  //   LEFT JOIN watchers ON watchers.album_id = albums.id
+  //   WHERE albums.id = @albumId;";
+
+  //   Album foundAlbum = _db.Query(sql, (Album album, Profile account) =>
+  //   {
+  //     album.Creator = account;
+  //     return album;
+  //   }, new { albumId }, splitOn: "id").SingleOrDefault();
+  //   return foundAlbum;
+  // }
+
   internal Album GetAlbumById(int albumId)
   {
     string sql = @"
-    SELECT albums.*, accounts.*
-    FROM albums
-    INNER JOIN accounts ON accounts.id = albums.creator_id
-    WHERE albums.id = @albumId;";
+  SELECT albums.*, accounts.*
+  FROM albums
+  INNER JOIN accounts ON accounts.id = albums.creator_id
+  WHERE albums.id = @albumId;";
 
     Album foundAlbum = _db.Query(sql, (Album album, Profile account) =>
     {
       album.Creator = account;
       return album;
-    }, new { albumId }).SingleOrDefault();
+    }, new { albumId }, splitOn: "id").SingleOrDefault();
+
+    if (foundAlbum != null)
+    {
+      string countSql = "SELECT COUNT(*) FROM watchers WHERE album_id = @albumId;";
+      var count = _db.QuerySingle<long>(countSql, new { albumId });
+      foundAlbum.WatcherCount = (int)count;
+    }
+
     return foundAlbum;
   }
 

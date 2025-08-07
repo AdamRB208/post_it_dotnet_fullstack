@@ -1,5 +1,6 @@
 import { Profile } from "./Account.js"
 
+
 export class Album {
   constructor(data) {
     this.id = data.id
@@ -12,5 +13,6 @@ export class Album {
     this.category = data.category
     this.creatorId = data.creatorId
     this.creator = new Profile(data.creator)
+    this.watcherCount = data.watcherCount
   }
 }
