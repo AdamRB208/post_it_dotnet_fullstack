@@ -6,6 +6,7 @@ import PictureForm from '@/components/PictureForm.vue';
 import { WatcherAlbum } from '@/models/Watcher.js';
 import { albumsService } from '@/services/AlbumsService.js';
 import { picturesService } from '@/services/PicturesService.js';
+import { watchersService } from '@/services/WatchersService.js';
 import { logger } from '@/utils/Logger.js';
 import { Pop } from '@/utils/Pop.js';
 import { computed, onMounted } from 'vue';
@@ -17,7 +18,21 @@ const account = computed(() => AppState.account)
 const picture = computed(() => AppState.pictures)
 const watcherAlbum = computed(() => AppState.watcherAlbums)
 
-const isWatching = computed(() => watcherAlbum.value.some(watcher => watcher.accountId == account.value?.id))
+const isWatching = computed(() => {
+
+  if (!account.value?.id) {
+    logger.log('No account ID found')
+    return false
+  }
+
+  const result = watcherAlbum.value.some(watcher => {
+    logger.log('Comparing watcher.id:', watcher.id, 'with account.id:', account.value.id)
+    return watcher.id === account.value.id
+  })
+
+  logger.log('isWatching result:', result)
+  return result
+})
 
 const route = useRoute()
 const router = useRouter()
@@ -25,6 +40,7 @@ const router = useRouter()
 onMounted(() => {
   getAlbumById()
   getPicturesByAlbumId()
+  getWatchersByAlbumId()
 })
 
 async function getAlbumById() {
@@ -81,6 +97,16 @@ async function getPicturesByAlbumId() {
   }
 }
 
+async function getWatchersByAlbumId() {
+  try {
+    const albumId = route.params.albumId
+    await watchersService.getWatchersByAlbumId(albumId)
+  }
+  catch (error) {
+    logger.error('Could not get watchers by Album Id', error)
+    Pop.error(error, 'COULD NOT GET WATCHERS BY ALBUM ID');
+  }
+}
 
 </script>
 
@@ -127,7 +153,7 @@ async function getPicturesByAlbumId() {
             <span>Join</span>
           </button>
         </div>
-        <div v-if="isWatching">
+        <div v-if="isWatching" class="text-light">
           <p>You are watching this album!</p>
         </div>
       </div>
