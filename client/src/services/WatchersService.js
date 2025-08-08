@@ -8,8 +8,10 @@ class WatchersService {
     AppState.watcherAlbums = []
     const response = await api.get('account/watchers')
     logger.log('Got Albums I am Watching', response.data)
+    logger.log('Fist item response data', response.data[0])
     const watcherAlbums = response.data.map(pojo => new WatcherAlbum(pojo))
     AppState.watcherAlbums = watcherAlbums
+    logger.log('Watcher Id', watcherAlbums.map(watcher => watcher.id))
   }
 
   async createWatcher(watcherData) {

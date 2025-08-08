@@ -4,6 +4,7 @@ import { AppState } from '../AppState.js';
 import { Pop } from '@/utils/Pop.js';
 import { logger } from '@/utils/Logger.js';
 import { watchersService } from '@/services/WatchersService.js';
+import AlbumsCard from '@/components/AlbumsCard.vue';
 
 const account = computed(() => AppState.account)
 const watcherAlbums = computed(() => AppState.watcherAlbums)
@@ -36,8 +37,8 @@ async function getMyWatchedAlbums() {
       </div>
     </div>
     <div class="row">
-      <div class="col-md-4">
-
+      <div v-for="watcher in watcherAlbums" :key="watcher.id" class="col-md-4">
+        <AlbumsCard :album="watcher" />
       </div>
     </div>
   </section>

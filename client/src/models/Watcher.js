@@ -19,9 +19,10 @@ export class WatcherProfile extends Profile {
   }
 }
 
-export class WatcherAlbum extends Watcher {
+export class WatcherAlbum extends Album {
   constructor(data) {
     super(data)
-    this.album = data.album ? new Album(data.album) : null
+    this.watcherId = data.watcherId
+    this.accountId = data.accountId
   }
 }
