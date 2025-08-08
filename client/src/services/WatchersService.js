@@ -1,9 +1,17 @@
 import { AppState } from "@/AppState.js"
 import { api } from "./AxiosService.js"
 import { logger } from "@/utils/Logger.js"
-import { WatcherProfile } from "@/models/Watcher.js"
+import { WatcherAlbum, WatcherProfile } from "@/models/Watcher.js"
 
 class WatchersService {
+  async getMyWatchedAlbums() {
+    AppState.watcherAlbums = []
+    const response = await api.get('account/watchers')
+    logger.log('Got Albums I am Watching', response.data)
+    const watcherAlbums = response.data.map(pojo => new WatcherAlbum(pojo))
+    AppState.watcherAlbums = watcherAlbums
+  }
+
   async createWatcher(watcherData) {
     const response = await api.post('api/watchers', watcherData)
     logger.log('Created Watcher!', response.data)
