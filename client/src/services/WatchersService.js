@@ -4,6 +4,14 @@ import { logger } from "@/utils/Logger.js"
 import { WatcherAlbum, WatcherProfile } from "@/models/Watcher.js"
 
 class WatchersService {
+  async deleteWatcher(watcherId) {
+    const response = await api.delete(`/api/watchers/${watcherId}`)
+    logger.log('Deleted Watcher!', response.data)
+    const watcherAlbums = AppState.watcherAlbums
+    const index = watcherAlbums.findIndex(watcher => watcher.id == watcherId)
+    watcherAlbums.splice(index, 1)
+  }
+
   async getMyWatchedAlbums() {
     AppState.watcherAlbums = []
     const response = await api.get('account/watchers')
