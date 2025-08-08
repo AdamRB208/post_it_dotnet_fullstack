@@ -3,35 +3,45 @@ import { AppState } from '@/AppState.js';
 import ModalComponent from '@/components/ModalComponent.vue';
 import PictureCard from '@/components/PictureCard.vue';
 import PictureForm from '@/components/PictureForm.vue';
-import { WatcherAlbum } from '@/models/Watcher.js';
 import { albumsService } from '@/services/AlbumsService.js';
 import { picturesService } from '@/services/PicturesService.js';
 import { watchersService } from '@/services/WatchersService.js';
 import { logger } from '@/utils/Logger.js';
 import { Pop } from '@/utils/Pop.js';
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, watchEffect } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 
 const album = computed(() => AppState.activeAlbum)
 const account = computed(() => AppState.account)
 const picture = computed(() => AppState.pictures)
-const watcherAlbum = computed(() => AppState.watcherAlbums)
+const watcherProfile = computed(() => AppState.WatcherProfiles)
 
 const isWatching = computed(() => {
-
   if (!account.value?.id) {
     logger.log('No account ID found')
     return false
   }
 
-  const result = watcherAlbum.value.some(watcher => {
-    logger.log('Comparing watcher.id:', watcher.id, 'with account.id:', account.value.id)
-    return watcher.id === account.value.id
-  })
+  if (!watcherProfile.value || watcherProfile.value.length === 0) {
+    logger.log('Watchers not loaded yet or no watchers found')
+    return false
+  }
 
-  logger.log('isWatching result:', result)
-  return result
+  try {
+    const foundWatcher = watcherProfile.value.find(watcher => {
+      logger.log('Checking watcher:', watcher)
+      return watcher?.id === account.value.id
+    })
+
+    const result = !!foundWatcher
+    logger.log('isWatching result:', result)
+    return result
+
+  } catch (error) {
+    logger.error('Error in isWatching:', error)
+    return false
+  }
 })
 
 const route = useRoute()
@@ -40,7 +50,12 @@ const router = useRouter()
 onMounted(() => {
   getAlbumById()
   getPicturesByAlbumId()
-  getWatchersByAlbumId()
+})
+
+watchEffect(() => {
+  if (account.value?.id && route.params.albumId) {
+    getWatchersByAlbumId()
+  }
 })
 
 async function getAlbumById() {
@@ -108,6 +123,17 @@ async function getWatchersByAlbumId() {
   }
 }
 
+async function createWatcher() {
+  try {
+    const watcherData = { albumId: route.params.albumId }
+    await watchersService.createWatcher(watcherData)
+  }
+  catch (error) {
+    Pop.error(error, 'Could not create Watcher!');
+    logger.log('COULD NOT CREATE WATCHER!', error)
+  }
+}
+
 </script>
 
 
@@ -148,13 +174,18 @@ async function getWatchersByAlbumId() {
             <span class="d-block">{{ album.watcherCount }}</span>
             <span> Watchers</span>
           </div>
-          <button v-if="account" class="btn btn-vue">
+          <button v-if="account" @click="createWatcher()" class="btn btn-vue">
             <span class="mdi mdi-account-plus d-block"></span>
             <span>Join</span>
           </button>
         </div>
         <div v-if="isWatching" class="text-light">
           <p>You are watching this album!</p>
+        </div>
+        <div class="watcher-albums d-flex flex-wrap gap-2">
+          <div v-for="watcher in watcherProfile" :key="watcher.id" class="p-1">
+            <img :src="watcher.picture" :alt="watcher.name" class="watcher-album-img rounded mb-2">
+          </div>
         </div>
       </div>
       <div class="col-md-9">
@@ -207,5 +238,13 @@ async function getWatchersByAlbumId() {
 .masonry-container>* {
   display: inline-block;
   break-inside: avoid;
+}
+.watcher-album {
+  width: 30%;
+}
+
+.watcher-album-img {
+  width: 100%;
+  aspect-ratio: 1/1;
 }
 </style>

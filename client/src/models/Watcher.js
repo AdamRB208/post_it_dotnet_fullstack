@@ -11,10 +11,11 @@ class Watcher {
   }
 }
 
-export class WatcherProfile extends Watcher {
+export class WatcherProfile extends Profile {
   constructor(data) {
     super(data)
-    this.profile = new Profile(data.profile)
+    this.watcherId = data.watcherId
+    this.albumId = data.albumId
   }
 }
 
