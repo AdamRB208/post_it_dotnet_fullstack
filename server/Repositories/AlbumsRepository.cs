@@ -36,7 +36,7 @@ public class AlbumsRepository
   {
     string sql = @"
     SELECT albums.*, accounts.*,
-      (SELECT COUNT(*) FROM watchers WHERE watchers.album_id = albums.id) as watcher_count
+      (SELECT COUNT(*) FROM watchers WHERE watchers.album_id = albums.id) as member_count
     FROM albums INNER JOIN accounts ON accounts.id = albums.creator_id;";
 
     List<Album> albums = _db.Query(sql, (Album album, Profile account) =>
@@ -99,7 +99,7 @@ public class AlbumsRepository
     {
       string countSql = "SELECT COUNT(*) FROM watchers WHERE album_id = @albumId;";
       var count = _db.QuerySingle<long>(countSql, new { albumId });
-      foundAlbum.WatcherCount = (int)count;
+      foundAlbum.MemberCount = (int)count;
     }
 
     return foundAlbum;

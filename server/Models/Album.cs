@@ -11,5 +11,5 @@ public class Album : RepoItem<int>
   public string CreatorId { get; set; }
   public Profile Creator { get; set; }
 
-  public int WatcherCount { get; set; }
+  public int MemberCount { get; set; }
 }

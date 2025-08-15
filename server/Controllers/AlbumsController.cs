@@ -116,6 +116,7 @@ public class AlbumsController : ControllerBase
     }
   }
 
+
   [Authorize]
   [HttpDelete("{albumId}")]
   public async Task<ActionResult<string>> DeleteAlbum(int albumId)
@@ -123,13 +124,15 @@ public class AlbumsController : ControllerBase
     try
     {
       Account userInfo = await _auth0Provider.GetUserInfoAsync<Account>(HttpContext);
-      string message = _albumsService.DeleteAlbum(albumId, userInfo);
-      return Ok(message);
+      Album album = _albumsService.ArchiveAlbum(albumId, userInfo);
+      return Ok(album);
     }
     catch (Exception error)
     {
       return BadRequest(error.Message);
     }
   }
+
+  // TODO either write another endpoint for hard deletes or use a query param in the method above to support archive/delete
 
 }
